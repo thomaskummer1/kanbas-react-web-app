@@ -4,6 +4,9 @@ export default function TOC() {
   return (
     <ul>
       <li>
+        <Link to="../">Kanbas</Link>
+      </li>
+      <li>
         <Link to="/Labs">Labs</Link>
       </li>
       <li>

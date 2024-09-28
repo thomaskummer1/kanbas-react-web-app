@@ -6,6 +6,10 @@ export default function KanbasNavigation() {
         Northeastern
       </a>
       <br />
+      <a href="https://github.com/thomaskummer1/kanbas-react-web-app" id="wd-github-link" target="_blank">
+        Github Repo
+      </a>
+      <br />
       <Link to="/Kanbas/Account" id="wd-account-link">
         Account
       </Link>
