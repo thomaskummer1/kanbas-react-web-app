@@ -81,7 +81,7 @@ export default function Profile() {
       </div>
       <div className="row">
         <div className="col-8 col-sm-6 col-lg-4">
-          <Link id="wd-signin-btn" to="/Kanbas/Dashboard">
+          <Link id="wd-signin-btn" to="/Kanbas/Account/Signin">
             <button
               id="wd-group-btn"
               className="btn btn-md btn-danger text-light me-1 mt-2 col-12"
@@ -94,13 +94,3 @@ export default function Profile() {
     </div>
   );
 }
-<div id="wd-profile-screen">
-  <select id="wd-role">
-    <option value="USER">User</option>
-    <option value="ADMIN">Admin</option>
-    <option value="FACULTY">Faculty</option>
-    <option value="STUDENT">Student</option>
-  </select>
-  <br />
-  <Link to="/Kanbas/Account/Signin">Sign out</Link>
-</div>;
