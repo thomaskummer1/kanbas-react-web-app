@@ -9,9 +9,6 @@ import {
   BsExclamationCircle,
 } from "react-icons/bs";
 import { AiOutlineAreaChart } from "react-icons/ai";
-{
-  /* Find more icons */
-}
 export default function CourseStatus() {
   return (
     <div id="wd-course-status" style={{ width: "300px" }}>

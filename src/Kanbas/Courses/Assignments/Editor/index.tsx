@@ -1,5 +1,13 @@
 import { CiCalendar } from "react-icons/ci";
+import { useParams } from "react-router";
+import * as db from "../../../Database";
+import assert from "assert";
+import { Link } from "react-router-dom";
 export default function AssignmentEditor() {
+  const { cid, aid } = useParams();
+  const assignment = db.assignments.find(
+    (assignment) => assignment._id === aid
+  );
   return (
     <div id="wd-assignments-editor">
       <h5 className="mt-3 ">
@@ -10,22 +18,23 @@ export default function AssignmentEditor() {
         <input
           className="form-control"
           id="wd-search-assignment"
-          value="A1 - ENV + HTML"
+          value={assignment && assignment.title}
         />
       </div>
       <br />
       <div className="border mt-5">
         <p className="mt-3 px-3">
-          The assignment is{" "}
-          <span style={{ color: "red" }}>available online </span>{" "}
-        </p>
+          {assignment && assignment.description}
+          {/* The assignment is{" "}
+          <span style={{ color: "red" }}>available online </span>{" "} */}
+        {/* </p>
         <p className="mt-3 px-3">
           Submit a link to the landing page of your Web application running on
           Netlify.
         </p>
         <p className="mt-3 px-3">
-          The landing page should include the following:
-        </p>
+          The landing page should include the following: */}
+        {/* </p>
         <ul>
           <li className="mt-1 px-3">Your full name and section</li>
           <li className="mt-1 px-3">Links to each lab assignment</li>
@@ -36,7 +45,7 @@ export default function AssignmentEditor() {
         </ul>
         <p className="mt-3 px-3">
           The Kanbas application should include a link to navigate back to the
-          landing page.
+          landing page. */}
         </p>
       </div>
       <br />
@@ -49,7 +58,7 @@ export default function AssignmentEditor() {
             <input
               className="form-control"
               id="wd-search-assignment"
-              value="100"
+              value={assignment && assignment.points}
             />
           </div>
         </div>
@@ -171,7 +180,7 @@ export default function AssignmentEditor() {
                 type="date"
                 className="form-control"
                 id="wd-due-date"
-                value="2024-05-13"
+                value={assignment && assignment.due}
               />
               <span className="input-group-text" id="basic-addon2">
                 <CiCalendar />
@@ -187,7 +196,7 @@ export default function AssignmentEditor() {
                     type="date"
                     className="form-control"
                     id="wd-available-from"
-                    value="2024-05-06"
+                    value={assignment && assignment.available}
                   />
                   <span className="input-group-text" id="basic-addon2">
                     <CiCalendar />
@@ -203,7 +212,7 @@ export default function AssignmentEditor() {
                     type="date"
                     className="form-control"
                     id="wd-available-until"
-                    value="2024-05-20"
+                    value={assignment && assignment.until}
                   />
                   <span className="input-group-text" id="basic-addon2">
                     <CiCalendar />
@@ -217,18 +226,22 @@ export default function AssignmentEditor() {
       <br />
       <hr />
       <div className="float-end">
+        <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
         <button
           id="wd-add-assignment-btn"
           className="btn btn-lg btn-danger me-1 float-end"
         >
           Save
         </button>
+        </Link>
+        <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
         <button
           id="wd-group-btn"
           className="btn btn-lg btn-secondary me-1 float-end"
         >
           Cancel
         </button>
+        </Link>
       </div>
     </div>
   );
