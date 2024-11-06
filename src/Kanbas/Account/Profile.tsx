@@ -1,96 +1,92 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrentUser } from "./reducer";
 export default function Profile() {
+  const [profile, setProfile] = useState<any>({});
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const fetchProfile = () => {
+    if (!currentUser) return navigate("/Kanbas/Account/Signin");
+    setProfile(currentUser);
+  };
+  const signout = () => {
+    dispatch(setCurrentUser(null));
+    navigate("/Kanbas/Account/Signin");
+  };
+  useEffect(() => {
+    fetchProfile();
+  }, []);
   return (
-    <div id="wd-profile-screen" className="container-fluid">
-      <div className="row">
-        <h3>Profile</h3>
-      </div>
-      <div className="row">
-        <div className="col-8 col-sm-6 col-lg-4">
-          <div className="input-group input-group-md float-start">
-            <input
-              className="form-control"
-              id="wd-username"
-              placeholder="username"
-              value="alice"
-            />
-          </div>
+    <div className="wd-profile-screen">
+      <h3>Profile</h3>
+      {profile && (
+        <div>
+          <input
+            defaultValue={profile.username}
+            id="wd-username"
+            className="form-control mb-2"
+            onChange={(e) =>
+              setProfile({ ...profile, username: e.target.value })
+            }
+          />
+          <input
+            defaultValue={profile.password}
+            id="wd-password"
+            className="form-control mb-2"
+            onChange={(e) =>
+              setProfile({ ...profile, password: e.target.value })
+            }
+          />
+          <input
+            defaultValue={profile.firstName}
+            id="wd-firstname"
+            className="form-control mb-2"
+            onChange={(e) =>
+              setProfile({ ...profile, firstName: e.target.value })
+            }
+          />
+          <input
+            defaultValue={profile.lastName}
+            id="wd-lastname"
+            className="form-control mb-2"
+            onChange={(e) =>
+              setProfile({ ...profile, lastName: e.target.value })
+            }
+          />
+          <input
+            defaultValue={profile.dob}
+            id="wd-dob"
+            className="form-control mb-2"
+            onChange={(e) => setProfile({ ...profile, dob: e.target.value })}
+            type="date"
+          />
+          <input
+            defaultValue={profile.email}
+            id="wd-email"
+            className="form-control mb-2"
+            onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+          />
+          <select
+            onChange={(e) => setProfile({ ...profile, role: e.target.value })}
+            className="form-control mb-2"
+            id="wd-role"
+          >
+            <option value="USER">User</option>{" "}
+            <option value="ADMIN">Admin</option>
+            <option value="FACULTY">Faculty</option>{" "}
+            <option value="STUDENT">Student</option>
+          </select>
+          <button
+            onClick={signout}
+            className="btn btn-danger w-100 mb-2"
+            id="wd-signout-btn"
+          >
+            Sign out
+          </button>
         </div>
-      </div>
-      <div className="row">
-        <div className="col-8 col-sm-6 col-lg-4">
-          <div className="input-group input-group-md mt-2 float-start">
-            <input
-              value="123"
-              type="password"
-              className="form-control"
-              id="wd-password"
-              placeholder="password"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-8 col-sm-6 col-lg-4">
-          <div className="input-group input-group-md mt-2 float-start">
-            <input
-              className="form-control"
-              id="wd-firstname"
-              placeholder="First Name"
-              value="Alice"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-8 col-sm-6 col-lg-4">
-          <div className="input-group input-group-md mt-2 float-start">
-            <input
-              className="form-control"
-              id="wd-lastname"
-              value="Wonderland"
-              placeholder="Last Name"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-8 col-sm-6 col-lg-4">
-          <div className="input-group input-group-md mt-2 float-start">
-            <input
-              className="form-control"
-              id="wd-dob"
-              value="2000-01-01"
-              type="date"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col-8 col-sm-6 col-lg-4">
-          <div className="input-group input-group-md mt-2 float-start">
-            <input
-              className="form-control"
-              id="wd-email"
-              value="alice@wonderland"
-              type="email"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-8 col-sm-6 col-lg-4">
-          <Link id="wd-signin-btn" to="/Kanbas/Account/Signin">
-            <button
-              id="wd-group-btn"
-              className="btn btn-md btn-danger text-light me-1 mt-2 col-12"
-            >
-              Sign out
-            </button>
-          </Link>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
