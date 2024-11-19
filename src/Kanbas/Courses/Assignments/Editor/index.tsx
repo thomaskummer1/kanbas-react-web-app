@@ -1,13 +1,32 @@
 import { CiCalendar } from "react-icons/ci";
 import { useParams } from "react-router";
-import * as db from "../../../Database";
-import assert from "assert";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { addAssignment, updateAssignment } from "../reducer";
+import { useDispatch, useSelector } from "react-redux";
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
-  const assignment = db.assignments.find(
-    (assignment) => assignment._id === aid
-  );
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const dispatch = useDispatch();
+  let ass;
+  if (aid === "new") {
+    ass = {
+      _id: "new",
+      title: "New Assignment",
+      course: cid,
+      description: "This is an example description",
+      points: 100,
+      due: "2021-12-01",
+      available: "2021-11-20",
+      until: "2021-12-01",
+    };
+  } else {
+    ass = assignments.find(
+      (assignment: { _id: string | undefined }) => assignment._id === aid
+    );
+  }
+
+  const [assignment, setAssignment] = useState(ass);
   return (
     <div id="wd-assignments-editor">
       <h5 className="mt-3 ">
@@ -18,35 +37,28 @@ export default function AssignmentEditor() {
         <input
           className="form-control"
           id="wd-search-assignment"
-          value={assignment && assignment.title}
+          defaultValue={assignment && assignment.title}
+          onChange={(e) =>
+            setAssignment({
+              ...assignment,
+              title: e.target.value,
+            } as typeof assignment)
+          }
         />
       </div>
       <br />
       <div className="border mt-5">
-        <p className="mt-3 px-3">
-          {assignment && assignment.description}
-          {/* The assignment is{" "}
-          <span style={{ color: "red" }}>available online </span>{" "} */}
-        {/* </p>
-        <p className="mt-3 px-3">
-          Submit a link to the landing page of your Web application running on
-          Netlify.
-        </p>
-        <p className="mt-3 px-3">
-          The landing page should include the following: */}
-        {/* </p>
-        <ul>
-          <li className="mt-1 px-3">Your full name and section</li>
-          <li className="mt-1 px-3">Links to each lab assignment</li>
-          <li className="mt-1 px-3">Link to the Kanbas application</li>
-          <li className="mt-1 px-3">
-            Links to all relevant source code repositories
-          </li>
-        </ul>
-        <p className="mt-3 px-3">
-          The Kanbas application should include a link to navigate back to the
-          landing page. */}
-        </p>
+        <input
+          className="form-control"
+          id="wd-search-assignment"
+          defaultValue={assignment && assignment.description}
+          onChange={(e) =>
+            setAssignment({
+              ...assignment,
+              description: e.target.value,
+            } as typeof assignment)
+          }
+        />
       </div>
       <br />
       <div className="row align-items-center">
@@ -58,7 +70,14 @@ export default function AssignmentEditor() {
             <input
               className="form-control"
               id="wd-search-assignment"
-              value={assignment && assignment.points}
+              type="number"
+              defaultValue={assignment && assignment.points}
+              onChange={(e) =>
+                setAssignment({
+                  ...assignment,
+                  points: e.target.value,
+                } as unknown as typeof assignment)
+              }
             />
           </div>
         </div>
@@ -180,7 +199,13 @@ export default function AssignmentEditor() {
                 type="date"
                 className="form-control"
                 id="wd-due-date"
-                value={assignment && assignment.due}
+                defaultValue={assignment && assignment.due}
+                onChange={(e) =>
+                  setAssignment({
+                    ...assignment,
+                    due: e.target.value,
+                  } as unknown as typeof assignment)
+                }
               />
               <span className="input-group-text" id="basic-addon2">
                 <CiCalendar />
@@ -196,7 +221,13 @@ export default function AssignmentEditor() {
                     type="date"
                     className="form-control"
                     id="wd-available-from"
-                    value={assignment && assignment.available}
+                    defaultValue={assignment && assignment.available}
+                    onChange={(e) =>
+                      setAssignment({
+                        ...assignment,
+                        available: e.target.value,
+                      } as unknown as typeof assignment)
+                    }
                   />
                   <span className="input-group-text" id="basic-addon2">
                     <CiCalendar />
@@ -212,7 +243,13 @@ export default function AssignmentEditor() {
                     type="date"
                     className="form-control"
                     id="wd-available-until"
-                    value={assignment && assignment.until}
+                    defaultValue={assignment && assignment.until}
+                    onChange={(e) =>
+                      setAssignment({
+                        ...assignment,
+                        until: e.target.value,
+                      } as unknown as typeof assignment)
+                    }
                   />
                   <span className="input-group-text" id="basic-addon2">
                     <CiCalendar />
@@ -227,20 +264,25 @@ export default function AssignmentEditor() {
       <hr />
       <div className="float-end">
         <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
-        <button
-          id="wd-add-assignment-btn"
-          className="btn btn-lg btn-danger me-1 float-end"
-        >
-          Save
-        </button>
+          <button
+            id="wd-add-assignment-btn"
+            className="btn btn-lg btn-danger me-1 float-end"
+            onClick={() => {
+              aid === "new"
+                ? dispatch(addAssignment(assignment))
+                : dispatch(updateAssignment(assignment));
+            }}
+          >
+            Save
+          </button>
         </Link>
         <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
-        <button
-          id="wd-group-btn"
-          className="btn btn-lg btn-secondary me-1 float-end"
-        >
-          Cancel
-        </button>
+          <button
+            id="wd-group-btn"
+            className="btn btn-lg btn-secondary me-1 float-end"
+          >
+            Cancel
+          </button>
         </Link>
       </div>
     </div>
