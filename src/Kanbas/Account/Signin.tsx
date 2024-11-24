@@ -8,7 +8,9 @@ export default function Signin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const signin = async () => {
-    const user =  await client.signin(credentials);
+    const user = await client.signin(credentials);
+    console.log("test");
+    console.log(user);
     if (!user) return;
     dispatch(setCurrentUser(user));
     navigate("/Kanbas/Dashboard");

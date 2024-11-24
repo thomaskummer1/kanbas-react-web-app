@@ -4,8 +4,13 @@ import { FaTrash } from "react-icons/fa";
 import { deleteAssignment } from "./reducer";
 import { useDispatch } from "react-redux";
 import AssignmentDeleter from "./AssignmentDeleter";
+import * as assignmentClient from "./client";
 export default function AssignmentControlButtons(assignmentID: any) {
   const dispatch = useDispatch();
+  const removeAssignment = async (assignmentID: string) => {
+    await assignmentClient.deleteAssignment(assignmentID);
+    dispatch(deleteAssignment(assignmentID));
+  };
   return (
     <div className="float-end">
       <button
@@ -20,9 +25,7 @@ export default function AssignmentControlButtons(assignmentID: any) {
       <IoEllipsisVertical className="fs-4" />
       <AssignmentDeleter
         dialogTitle="Delete Assignment?"
-        deleteAssignment={() =>
-          dispatch(deleteAssignment(assignmentID.assignmentID))
-        }
+        deleteAssignment={() => removeAssignment(assignmentID.assignmentID)}
       />
     </div>
   );

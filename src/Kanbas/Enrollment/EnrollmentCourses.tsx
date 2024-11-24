@@ -1,17 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addEnrollment, deleteEnrollment } from "./reducer";
-
+import * as enrollmentClient from "./client";
+import * as coursesClient from "../Courses/client";
+import { setEnrollments } from "./reducer";
 export default function EnrollmentCourses({
   dialogTitle,
-  courses,
+  userCourses,
 }: {
   dialogTitle: string;
-  courses: any[];
+  userCourses: any[];
 }) {
   const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
   const [registeredCourses, setRegisteredCourses] = useState(false);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const [courses, setCourses] = useState<any[]>(userCourses);
   const filteredEnrollments = enrollments.filter(
     (e: { user: any }) => e.user === currentUser._id
   );
@@ -22,6 +25,30 @@ export default function EnrollmentCourses({
     }
   }
   const dispatch = useDispatch();
+  const fetchEnrollments = async () => {
+    const enrollments = await enrollmentClient.fetchAllEnrollments();
+    dispatch(setEnrollments(enrollments));
+  };
+  const fetchCourses = async () => {
+    const courses = await coursesClient.fetchAllCourses();
+    setCourses(courses);
+  };
+  const handleAddEnrollment = async (enrollment: any) => {
+    const added = await enrollmentClient.addEnrollment(enrollment);
+    dispatch(addEnrollment(added));
+    fetchEnrollments();
+  };
+  const handleDeleteEnrollment = async (enrollment: any) => {
+    const removed = await enrollmentClient.deleteEnrollment(enrollment);
+    dispatch(deleteEnrollment(removed));
+    fetchEnrollments();
+  };
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+  useEffect(() => {
+    fetchEnrollments();
+  }, []);
   return (
     <div
       id="wd-add-module-dialog"
@@ -51,12 +78,10 @@ export default function EnrollmentCourses({
                       <button
                         className="btn btn-danger float-end"
                         onClick={() =>
-                          dispatch(
-                            deleteEnrollment({
-                              user: currentUser._id,
-                              course: course._id,
-                            })
-                          )
+                          handleDeleteEnrollment({
+                            user: currentUser._id,
+                            course: course._id,
+                          })
                         }
                       >
                         unEnroll
@@ -65,12 +90,10 @@ export default function EnrollmentCourses({
                       <button
                         className="btn btn-primary float-end"
                         onClick={() =>
-                          dispatch(
-                            addEnrollment({
-                              user: currentUser._id,
-                              course: course._id,
-                            })
-                          )
+                          handleAddEnrollment({
+                            user: currentUser._id,
+                            course: course._id,
+                          })
                         }
                       >
                         Enroll
@@ -85,12 +108,10 @@ export default function EnrollmentCourses({
                     <button
                       className="btn btn-danger float-end"
                       onClick={() =>
-                        dispatch(
-                          deleteEnrollment({
-                            user: currentUser._id,
-                            course: course._id,
-                          })
-                        )
+                        handleDeleteEnrollment({
+                          user: currentUser._id,
+                          course: course._id,
+                        })
                       }
                     >
                       unEnroll

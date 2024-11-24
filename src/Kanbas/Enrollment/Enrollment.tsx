@@ -1,5 +1,5 @@
 import EnrollmentCourses from "./EnrollmentCourses";
-
+import { useDispatch } from "react-redux";
 export default function Enrollment({ courses }: { courses: any[] }) {
   return (
     <div>
@@ -13,7 +13,7 @@ export default function Enrollment({ courses }: { courses: any[] }) {
       </button>
       <EnrollmentCourses
         dialogTitle="Courses for Enrollment"
-        courses={courses}
+        userCourses={courses}
       />
     </div>
   );
