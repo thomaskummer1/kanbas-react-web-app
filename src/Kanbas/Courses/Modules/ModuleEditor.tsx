@@ -1,3 +1,4 @@
+import * as client from "./client";
 export default function ModuleEditor({
   dialogTitle,
   moduleName,
@@ -9,6 +10,11 @@ export default function ModuleEditor({
   setModuleName: (name: string) => void;
   addModule: () => void;
 }) {
+  const createModule = async () => {
+    client.createModule({ name: moduleName });
+    addModule();
+  };
+
   return (
     <div
       id="wd-add-module-dialog"
@@ -45,7 +51,7 @@ export default function ModuleEditor({
               Cancel{" "}
             </button>
             <button
-              onClick={addModule}
+              onClick={() => createModule()}
               type="button"
               data-bs-dismiss="modal"
               className="btn btn-danger"

@@ -15,4 +15,8 @@ export const deleteModule = async (moduleId: string) => {
   );
   return data;
  };
- 
+
+export const createModule = async (module: any) => {
+  const { data } = await axiosWithCredentials.post(MODULES_API, module);
+  return data;
+ };
